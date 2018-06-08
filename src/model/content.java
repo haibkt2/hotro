@@ -13,7 +13,7 @@ public class content {
 	private String author;
 	private Date date;
 	int countview;
-
+	private String file;
 	public content() {
 	}
 
@@ -22,6 +22,14 @@ public class content {
 		this.ten = ten;
 		this.author = author;
 		this.summary = summary;
+	}
+
+	public String getFile() {
+		return file;
+	}
+
+	public void setFile(String file) {
+		this.file = file;
 	}
 
 	public content(int idtin, String ten, int countview) {
@@ -100,10 +108,19 @@ public class content {
 		this.date = date;
 
 	}
-	public content(String ten, String summary, String noidung) {
+	public content(int id, String summary, String ten, String author, Date date) {
+		this.ten = ten;
+		this.summary = summary;
+		this.author = author;
+		this.date = date;
+		this.idtin = id;
+
+	}
+	public content(String ten, String summary, String noidung,String file) {
 		this.ten = ten;
 		this.summary = summary;
 		this.noidung = noidung;
+		this.file = file;
 
 	}
 

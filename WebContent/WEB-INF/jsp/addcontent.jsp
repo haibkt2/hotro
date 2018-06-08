@@ -112,7 +112,7 @@
 						<td>
 							<%
 								for (int j = 1; j <i; j++) {
-							%> <select name="menu" id="select<%=j%>">
+							%> <select name="menu<%=j%>" id="select<%=j%>">
 								<%
 									List<menu> listMenu = lt.listMenu(j);
 										for (menu mn : listMenu) {

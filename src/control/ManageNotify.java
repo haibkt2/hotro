@@ -43,7 +43,7 @@ public class ManageNotify extends HttpServlet {
 //		listNotyfy = listNotify();
 		String add_nt = req.getParameter("add_nt");
 		if(add_nt != null) 
-			req.setAttribute("add_sp", add_nt);
+			req.setAttribute("add_nt", add_nt);
 		String mss_del = req.getParameter("mss_del");
 		if(mss_del != null) 
 			req.setAttribute("mss_del", mss_del);

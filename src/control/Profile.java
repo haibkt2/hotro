@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -78,7 +79,7 @@ public class Profile extends HttpServlet {
 		List<menu> listContM = new ArrayList<menu>();
 		try {
 			Connection connection = Connect.getConnection();
-			String sql = "SELECT content.idtin,menu.menu, menu.idsupport, menu.idmenu, content.summary,content.ten "
+			String sql = "SELECT content.idtin,menu.menu, menu.idsupport, menu.idmenu, content.summary,content.ten,content.author,content.day "
 					+ "FROM menu JOIN content ON menu.idmenu = content.idmenu " + c;
 
 			Statement st = connection.createStatement();
@@ -91,8 +92,10 @@ public class Profile extends HttpServlet {
 				int idmn = rs.getInt(4);
 				String summary = rs.getString(5);
 				String ten = rs.getString(6);
+				String author = rs.getString(7);
+				Date day = rs.getDate(8);
 				menu mn = new menu(menu, idsp, idmn);
-				mn.addMenu(new content(idtin, summary, ten));
+				mn.addMenu(new content(idtin, summary, ten,author,day));
 				listContM.add(mn);
 			}
 

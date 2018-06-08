@@ -18,11 +18,13 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -31,6 +33,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import database.Connect;
 
 @WebServlet("/AddNewNotify")
+@MultipartConfig
 public class AddNewNotify extends HttpServlet {
 
 	/**
@@ -69,40 +72,23 @@ public class AddNewNotify extends HttpServlet {
 
 				try {
 					String file = "";
-					List<FileItem> multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(req);
-
-					for (FileItem item : multiparts) {
-						// if (!item.isFormField()) {
-						// String name = new File(item.getName()).getName();
-						// item.write(new File(UPLOAD_DIRECTORY + File.separator
-						// + name));
-						// }
-
-						if (!item.isFormField()) {
-							String name = new File(item.getName()).getName();
-							file = name;
-							item.write(new File(UPLOAD_DIRECTORY + File.separator + name));
-							req.setAttribute("message", "File(s) uploaded successfully!");
-						} else {
-							String fieldname = item.getFieldName();
-							String fieldvalue = item.getString();
-
-							if (fieldname.equals("title")) {
-								title = new String(fieldvalue.getBytes(StandardCharsets.ISO_8859_1),
-										StandardCharsets.UTF_8);
-								// new String (s.getBytes ("iso-8859-1"),
-								// "UTF-8");
-							} else if (fieldname.equals("content")) {
-								// next logic goes here...
-								content = new String(fieldvalue.getBytes(StandardCharsets.ISO_8859_1),
-										StandardCharsets.UTF_8);
-							}
-						}
-
+//					List<FileItem> multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(req);
+					title = req.getParameter("title");
+					content = req.getParameter("content");
+					Part part = req.getPart("guru_file");
+					if (part.getSize() != 0) {
+						 file = extractFileName(part);
+						// refines the fileName in case it is an absolute path
+						file = new File(file).getName();
+						part.write(UPLOAD_DIRECTORY + File.separator + file);
 					}
+					
+
 					HttpSession ss = req.getSession();
 					String author = (String) ss.getAttribute("hoten");
-					getServletContext().getRequestDispatcher("/ManageNotify?add_nt="+insertNoti(title, content, author, file)).forward(req, resp);
+					getServletContext()
+							.getRequestDispatcher("/ManageNotify?add_nt=" + insertNoti(title, content, author, file))
+							.forward(req, resp);
 				} catch (Exception e) {
 					req.setAttribute("message", "File(s) upload failed due to " + e.getMessage() + "!");
 				}
@@ -113,6 +99,17 @@ public class AddNewNotify extends HttpServlet {
 			// getServletContext().getRequestDispatcher("/message.jsp").forward(req,
 			// resp);
 		}
+	}
+
+	private String extractFileName(Part part) {
+		String contentDisp = part.getHeader("content-disposition");
+		String[] items = contentDisp.split(";");
+		for (String s : items) {
+			if (s.trim().startsWith("filename")) {
+				return s.substring(s.indexOf("=") + 2, s.length() - 1);
+			}
+		}
+		return "";
 	}
 
 	private String insertNoti(String title, String content, String au, String file)

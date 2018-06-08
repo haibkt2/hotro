@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -18,8 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import database.Connect;
 import model.*;
 
-@WebServlet(urlPatterns = { "/ManageAccount" })
-public class ManageAuthor extends HttpServlet {
+@WebServlet(urlPatterns = { "/ManageAccount2" })
+public class ManageAccount2 extends HttpServlet {
 
 	/**
 	 * 
@@ -37,14 +36,14 @@ public class ManageAuthor extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 //		List<notify> listNotyfy;
 //		listNotyfy = listNotify();
-		String add_user = req.getParameter("add_user");
-		if(add_user != null) 
-			req.setAttribute("add_user", add_user);
-		String mess_del = req.getParameter("mss_del");
-		if(mess_del != null) 
-			req.setAttribute("mss_del", mess_del);
-		req.setAttribute("listAc", listAc());
-		req.getRequestDispatcher("/WEB-INF/jsp/manageauthor.jsp").forward(req, resp);
+//		String add_user = req.getParameter("add_user");
+//		if(add_user != null) 
+//			req.setAttribute("add_user", add_user);
+//		String mess_del = req.getParameter("mss_del");
+//		if(mess_del != null) 
+//			req.setAttribute("mss_del", mess_del);
+//		req.setAttribute("listAc", listAc());
+		req.getRequestDispatcher("/WEB-INF/jsp/manageauthor2.jsp").forward(req, resp);
 	}
 
 	private List<account> listAc() {

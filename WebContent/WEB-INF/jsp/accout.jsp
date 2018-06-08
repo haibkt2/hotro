@@ -7,6 +7,20 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>VNPT SUPPORT</title>
+
+
+.sideaccoutsub a {
+	padding: 8px 8px 8px 32px;
+	text-decoration: none;
+	font-size: 20px;
+	color: #818181;
+	display: block;
+	transition: 0.3s;
+}
+
+.sideaccoutsub a:hover {
+	color: #f1f1f1;
+}
 <link
 	href="${pageContext.request.contextPath}/js/table/css/vendor/bootstrap.min.css"
 	rel="stylesheet" type="text/css" />
@@ -30,20 +44,6 @@
 	transition: 0.5s;
 	padding-top: 60px;
 }
-
-.sideaccoutsub a {
-	padding: 8px 8px 8px 32px;
-	text-decoration: none;
-	font-size: 20px;
-	color: #818181;
-	display: block;
-	transition: 0.3s;
-}
-
-.sideaccoutsub a:hover {
-	color: #f1f1f1;
-}
-
 .sideaccoutsub .closebtnaccoutsub {
 	position: absolute;
 	top: 0;
@@ -100,6 +100,8 @@
 					Notify</a> 
 				<a href="${pageContext.request.contextPath}/ManageAccount">Manage
 					Author</a>
+				<a href="${pageContext.request.contextPath}/ManageAccount2">Manage
+					Author2</a>
 
 			</div>
 			
@@ -147,7 +149,9 @@
 				</script>
 				<a style="text-align: left; font-size: 16px;"
 					href="${pageContext.request.contextPath}/AddNewCt?addtin=">Thêm
-					nội dung</a><br> <br>
+					nội dung</a> 
+<!-- 					|| <a style="text-align: left; font-size: 16px;" -->
+<%-- 					href="${pageContext.request.contextPath}/Import?import=">Import bài viết</a><br> <br> --%>
 				<h2>${thongbao}</h2>
 				<section> <br>
 				<form
@@ -198,11 +202,13 @@
 					class="table table-bordered table-striped">
 					<thead>
 						<tr>
-							<th style="width: 15%;">MENU</th>
-							<th style="width: 16%;">SUMMARY</th>
-							<th style="width: 57%;">CONTENT</th>
+							<th style="width: 10%;">MENU</th>
+							<th style="width: 15%;">SUMMARY</th>
+							<th style="width: 50%;">NAME CONTENT</th>
+							<th style="width: 3%;">AUTHOR</th>
+							<th style="width: 20%;">DATE</th>
 							<th style="width: 3%;">EDIT</th>
-							<th style="width: 4%;">DELETE</th>
+							<th style="width: 2%;">DELETE</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -216,6 +222,8 @@
 							<td><%=mn.getMenu()%></td>
 							<td><%=ct.getSummary()%></td>
 							<td><%=ct.getTen()%></td>
+							<td><%=ct.getAuthor()%></td>
+							<td><%=ct.getDate()%></td>
 							<td><a style="color: green;"
 								href="${pageContext.request.contextPath}/EditContent?ten=<%=ct.getTen()%>&idmn=<%=mn.getIdmenu()%>&idsp=<%=mn.getIdsupport()%>&idct=<%=ct.getIdtin()%>">Sửa</a></td>
 							<td><a style="color: red;"

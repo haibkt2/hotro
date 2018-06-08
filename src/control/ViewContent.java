@@ -57,7 +57,7 @@ public class ViewContent extends HttpServlet {
 		content ctv = new content();
 		try {
 			Connection connection = Connect.getConnection();
-			String sql = "SELECT content.idtin,content.ten, content.noidung,content.author FROM content WHERE idtin = '"
+			String sql = "SELECT content.idtin,content.ten, content.noidung,content.author,content.file FROM content WHERE idtin = '"
 					+ id + "'";
 			Statement st = connection.createStatement();
 			ResultSet rs = st.executeQuery(sql);
@@ -66,6 +66,7 @@ public class ViewContent extends HttpServlet {
 				ctv.setTen(rs.getString(2));
 				ctv.setNoidung(rs.getString(3));
 				ctv.setAuthor(rs.getString(4));
+				ctv.setFile(rs.getString(5));
 			}
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();

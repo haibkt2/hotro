@@ -98,7 +98,7 @@ input[type=submit] {
 			<section id="content"> <br>
 			<h2 style="text-align: center;">CREATE USER</h2>
 			<div class="khungregister">
-				<form action="${pageContext.request.contextPath}/Register?register=regNew" id="fm" method="post">
+				<form action="${pageContext.request.contextPath}/AddNewUser" id="fm" method="post">
 					<h3 style="text-align: center;" id="e">${mes_reg }</h3>
 					<label
 						for="username">Username</label> <input type="text" id="id"

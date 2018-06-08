@@ -30,8 +30,10 @@
                 <form style="margin-top: 30px;">
 					<div class="holder"
 						style="float: right; margin: 0px 100px 25px 0px;">
+						<%--
 						<a href="${pageContext.request.contextPath}/ViewContent?idtin=<%=ctv.getIdtin()%>&exWord=exWord"><img
 							src="${pageContext.request.contextPath}/img/excel.jpg"></img></a>
+						--%>
 					</div>
 				</form>
                     <article>
@@ -41,8 +43,15 @@
                         <br/><h2 style="text-align: center;"><%=ctv.getTen() %></h2>
                     <div id="noidung"><%=ctv.getNoidung() %></div>
                     <input type="hidden" value="<%=ctv.getNoidung()%>" name=""/>
+                    <%
+							String f = ctv.getFile();
+							if(f != null){
+								%>
+							<p>File đính kèm : <a href="${pageContext.request.contextPath}/Dowload?file=<%=f%>"><%=f%></a></p>
+								<%
+							}
+							%>
                     <h4 style="text-align: right;">Tác giả: <%=ctv.getAuthor() %></h4>
-
                 </article>
 
                 <%--

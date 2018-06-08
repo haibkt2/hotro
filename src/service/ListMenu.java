@@ -230,7 +230,7 @@ public class ListMenu {
 		try {
 			
 			Connection connection = Connect.getConnection();
-			String sql = "SELECT content.ten, content.summary,content.noidung ,menu.menu FROM content JOIN menu ON content.idmenu = menu.idmenu Where content.idtin = "+idtin;
+			String sql = "SELECT content.ten, content.summary,content.noidung ,menu.menu ,content.file FROM content JOIN menu ON content.idmenu = menu.idmenu Where content.idtin = "+idtin;
 			Statement st = connection.createStatement();
 			ResultSet rs = st.executeQuery(sql);
 			while (rs.next()) {
@@ -238,8 +238,9 @@ public class ListMenu {
 				String summary = rs.getString(2);
 				String noidung = rs.getString(3);
 				String menu = rs.getString(4);
+				String file = rs.getString(5);
 				contentFix.setMenu(menu);
-				contentFix.setCt(new content(ten, summary, noidung));
+				contentFix.setCt(new content(ten, summary, noidung,file));
 			}
 
 		} catch (ClassNotFoundException | SQLException e) {

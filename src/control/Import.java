@@ -2,11 +2,7 @@ package control;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +12,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,24 +19,21 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
-import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-
 import database.Connect;
 
-@WebServlet("/AddContent")
-@MultipartConfig
-public class AddContent extends HttpServlet {
+@WebServlet("/Import")
+public class Import extends HttpServlet {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private static final String UPLOAD_DIRECTORY = "d:/server_reponsitory";
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		// this.doPost(req, resp);
+		this.doPost(req, resp);
 	}
 
 	@Override
@@ -52,60 +44,67 @@ public class AddContent extends HttpServlet {
 			req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
 		else {
 			req.setCharacterEncoding("UTF-8");
-			String idsp = req.getParameter("select");
-			int idmenu = Integer.parseInt(req.getParameter("menu"+idsp));
-			String contentName = req.getParameter("ten");
-			String summary = req.getParameter("summary");
-			String content = req.getParameter("nd");
-			File uploadDir = new File(UPLOAD_DIRECTORY);
-			if (!uploadDir.exists()) {
-				uploadDir.mkdir();
-			}
-
-			String file = "";
-			// List<FileItem> multiparts = new ServletFileUpload(new
-			// DiskFileItemFactory()).parseRequest(req);
-			Part part = req.getPart("file");
-			if (part.getSize() != 0) {
-				file = extractFileName(part);
-				// refines the fileName in case it is an absolute path
-				file = new File(file).getName();
-				part.write(UPLOAD_DIRECTORY + File.separator + file);
-			}
-			// Part filePart = req.getPart("file");
-			// if (filePart.getSize() != 0) {
-			// // String fileName =
-			// //
-			// Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-			// InputStream fileContent = filePart.getInputStream();
-			// // ReadWord rw = new ReadWord();
-			//
-			// try {
-			// XWPFDocument doc = new XWPFDocument(fileContent);
-			// XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
-			// text = extractor.getText();
-			// extractor.close();
-			// content = content + text;
-			// } catch (Exception e1) {
-			// }
-			// }
-			try {
-				String addtin = req.getParameter("addtin");
-				if (addtin == null) {
-					req.setAttribute("mes_add", insertContent(idsp, idmenu, contentName, summary, content, author,file));
-
-				} else {
-					if(file.length() == 0)
-						file = req.getParameter("fileold");
-					req.setAttribute("mes_add",
-							updateContent(Integer.parseInt(addtin), idmenu, contentName, summary, content, author,file));
+			String imp = "";
+			imp = req.getParameter("import");
+			if (imp == null || imp.equals("")) {
+				req.getRequestDispatcher("/WEB-INF/jsp/import.jsp").forward(req, resp);
+			} else {
+				String idsp = req.getParameter("select");
+				int idmenu = Integer.parseInt(req.getParameter("menu" + idsp));
+				String contentName = req.getParameter("ten");
+				String summary = req.getParameter("summary");
+				String content = req.getParameter("nd");
+				File uploadDir = new File(UPLOAD_DIRECTORY);
+				if (!uploadDir.exists()) {
+					uploadDir.mkdir();
 				}
-				req.getRequestDispatcher("/WEB-INF/jsp/addcontent.jsp").forward(req, resp);
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 
+				String file = "";
+				// List<FileItem> multiparts = new ServletFileUpload(new
+				// DiskFileItemFactory()).parseRequest(req);
+				Part part = req.getPart("file");
+				if (part.getSize() != 0) {
+					file = extractFileName(part);
+					// refines the fileName in case it is an absolute path
+					file = new File(file).getName();
+					part.write(UPLOAD_DIRECTORY + File.separator + file);
+				}
+				// Part filePart = req.getPart("file");
+				// if (filePart.getSize() != 0) {
+				// // String fileName =
+				// //
+				// Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+				// InputStream fileContent = filePart.getInputStream();
+				// // ReadWord rw = new ReadWord();
+				//
+				// try {
+				// XWPFDocument doc = new XWPFDocument(fileContent);
+				// XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
+				// text = extractor.getText();
+				// extractor.close();
+				// content = content + text;
+				// } catch (Exception e1) {
+				// }
+				// }
+				try {
+					String addtin = req.getParameter("addtin");
+					if (addtin == null) {
+						req.setAttribute("mes_add",
+								insertContent(idsp, idmenu, contentName, summary, content, author, file));
+
+					} else {
+						if (file.length() == 0)
+							file = req.getParameter("fileold");
+						req.setAttribute("mes_add", updateContent(Integer.parseInt(addtin), idmenu, contentName,
+								summary, content, author, file));
+					}
+					req.getRequestDispatcher("/WEB-INF/jsp/addcontent.jsp").forward(req, resp);
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
 		}
 	}
 
@@ -121,7 +120,7 @@ public class AddContent extends HttpServlet {
 	}
 
 	public String insertContent(String idsps, int idmenu, String contentName, String summary, String content,
-			String author,String file) throws ClassNotFoundException, UnsupportedEncodingException {
+			String author, String file) throws ClassNotFoundException, UnsupportedEncodingException {
 		String mes_add = "";
 		Connection connect;
 		try {
@@ -146,7 +145,7 @@ public class AddContent extends HttpServlet {
 	}
 
 	public String updateContent(int idtin, int idmenu, String contentName, String summary, String content,
-			String author,String file) throws ClassNotFoundException, UnsupportedEncodingException {
+			String author, String file) throws ClassNotFoundException, UnsupportedEncodingException {
 		String mes_edit = "";
 		Connection connect;
 		try {

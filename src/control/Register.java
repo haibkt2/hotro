@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import database.Connect;
 
@@ -42,15 +43,41 @@ public class Register extends HttpServlet {
 			req.getRequestDispatcher("/WEB-INF/jsp/register.jsp").forward(req, resp);
 		} else {
 			name_login = req.getParameter("id");
-			pass = req.getParameter("pass");
 			try {
-				req.setAttribute("mes_reg", addUser(pass, name_login));
-				req.getRequestDispatcher("/WEB-INF/jsp/register.jsp").forward(req, resp);
-			} catch (ClassNotFoundException e) {
+				if(CheckName(name_login)){
+					req.setAttribute("mes_reg", "Đăng ký thất bại, Tên đăng ký đã tồn tại");
+					req.getRequestDispatcher("/WEB-INF/jsp/register.jsp").forward(req, resp);
+				}
+				else {
+					pass = req.getParameter("pass");
+					try {
+						req.setAttribute("mes_reg", addUser(pass, name_login));
+						req.getRequestDispatcher("/WEB-INF/jsp/register.jsp").forward(req, resp);
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			} catch (ClassNotFoundException e1) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				e1.printStackTrace();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
+			
 		}
+	}
+	public boolean CheckName(String name) throws SQLException, ClassNotFoundException {
+		boolean check_login = true;
+		String sql = "SELECT role,username,password,hoten FROM accout WHERE hoten = \"" + name+"\"";
+		Connection con = Connect.getConnection();
+		Statement st = con.createStatement();
+		ResultSet rs = st.executeQuery(sql);
+		if (!rs.next()) {
+			check_login = false;
+		} 
+		return check_login;
 	}
 
 	public String addUser(String pass, String name_login)

@@ -128,7 +128,7 @@
 						<td>
 							<%
 								for (int j = 1; j <i; j++) {
-							%> <select name="menu" id="select<%=j%>">
+							%> <select name="menu<%=j%>" id="select<%=j%>">
 								<%
 									List<menu> listMenu = lt.listMenu(j);
 										for (menu mn : listMenu) {
@@ -164,6 +164,15 @@
 							</script></td>
 					</tr>
 					<tr>
+						<td>File old</td>
+						<td>
+						<input name="fileold" style="display: none" value="<%=mnf.getCt().getFile()%>">
+						<%if(mnf.getCt().getFile()!=null) {%>
+						<a href="${pageContext.request.contextPath}/Dowload?file=<%=mnf.getCt().getFile()%>"><p><%=mnf.getCt().getFile()%></p></a>
+						<%} %>
+						</td>
+					</tr>
+					<tr>
 						<td>File</td>
 						<td>
 						<input type="file" name="file" value="" multiple="true" />
@@ -174,7 +183,7 @@
 				<input type="submit" value="Chỉnh sửa bài viết" onclick="kt();"
 					style="padding: 8px; margin-left: 400px;">
 			</form>
-			<div class="clear"></div>k
+			<div class="clear"></div>
 		</div>
 		<jsp:include page="footer.jsp"></jsp:include>
 	</div>

@@ -1,50 +1,34 @@
 package service;
-import java.io.InputStream;
-//import java.io.FileInputStream;
-//import java.io.BufferedInputStream;
 
-//import org.apache.poi.poifs.filesystem.FileMagic;
-import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.List;
+
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-//import org.apache.poi.hwpf.extractor.WordExtractor;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 
 public class ReadWord {
 
-	public String read(InputStream is) throws Exception {
+	public static void main(String[] args) {
+		try {
+            File file = new File("D:/server_reponsitory/DanhSachBaiDang-sad2018-0527-15-09-06.docx");
+            FileInputStream fis = new FileInputStream(file.getAbsolutePath());
 
-//		System.out.println(FileMagic.valueOf(is));
+            XWPFDocument document = new XWPFDocument(fis);
 
-		String text = "";
+            List<XWPFParagraph> paragraphs = document.getParagraphs();
 
-//		if (FileMagic.valueOf(is) == FileMagic.OLE2) {
-//			WordExtractor ex = new WordExtractor(is);
-//			text = ex.getText();
-////			
-//		} else if (FileMagic.valueOf(is) == FileMagic.OOXML) {
-			XWPFDocument doc = new XWPFDocument(is);
-			XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
-			text = extractor.getText();
-			extractor.close();
-//		}
-
-		return text;
-
-	}
-
-	public static void main(String[] args) throws Exception {
-
-//		InputStream is = new BufferedInputStream(new FileInputStream("D:\\td\\d.docx")); // really a binary OLE2 Word
-																							// file
-//		System.out.println(read(is));
-//		is.close();
-
-//		is = new BufferedInputStream(new FileInputStream("D:\\td\\demo.doc")); // a OOXML Word file named *.doc
-//		System.out.println(read(is));
-//		is.close();
-//
-//		is = new BufferedInputStream(new FileInputStream("D:\\td\\d.docx")); // really a OOXML Word file
-//		System.out.println(read(is));
-//		is.close();
-
-	}
+            int i = 0;
+            String author = "";
+            String content = "";
+            
+            for (XWPFParagraph para : paragraphs) {
+                System.out.println(para.getText());
+            }
+            fis.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+	
 }
